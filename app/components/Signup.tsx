@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 type SignupErrors = {
   email?: string;
@@ -15,19 +15,20 @@ export default function Signup() {
   const [hasConsent, setHasConsent] = useState(false);
   const [errors, setErrors] = useState<SignupErrors>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
   const validateForm = () => {
     const nextErrors: SignupErrors = {};
     const trimmedEmail = email.trim();
 
     if (!trimmedEmail) {
-      nextErrors.email = `Enter your email address.`;
+      nextErrors.email = "Enter your email address.";
     } else if (!emailPattern.test(trimmedEmail)) {
-      nextErrors.email = `Enter a valid email address.`;
+      nextErrors.email = "Enter a valid email address.";
     }
 
     if (!hasConsent) {
-      nextErrors.consent = `You must agree before joining the waitlist.`;
+      nextErrors.consent = "You must agree before joining the waitlist.";
     }
 
     setErrors(nextErrors);
@@ -41,136 +42,132 @@ export default function Signup() {
       return;
     }
 
-    // Async submit boundary: static export UI contract only.
-    // Replace this boundary with the production waitlist request when an endpoint exists.
     setIsSubmitted(true);
   };
 
   return (
     <motion.section
       id="signup"
-      className="signup-section w-full bg-[var(--color-text)] px-4 py-16 text-[var(--color-background)] sm:px-6 sm:py-20 lg:px-8"
-      initial={{ opacity: 0, y: 24 }}
+      className="bg-[var(--color-bg)] px-5 py-24 text-[var(--color-text)] sm:px-8 sm:py-28 lg:px-16 lg:py-32"
+      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.35 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: shouldReduceMotion ? 0.01 : 0.6, ease: "easeOut" }}
     >
-      <div className="signup-shell mx-auto flex w-full max-w-2xl flex-col items-center justify-center">
-        <motion.div
-          className="signup-card w-full rounded-3xl bg-[var(--color-text)] p-6 ring-1 ring-[var(--color-background)]/15 sm:p-8 lg:p-10"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.45, ease: "easeOut", delay: 0.08 }}
-        >
-          <h2 className="signup-title font-[family-name:var(--font-display)] text-3xl font-semibold leading-tight tracking-tight text-[var(--color-background)] sm:text-4xl">
+      <div className="mx-auto grid max-w-4xl gap-8 rounded-[32px] bg-[var(--color-accent)]/18 px-6 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
+        <div className="max-w-2xl">
+          <p className="font-[family-name:var(--font-body)] text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--color-primary)]">
+            Email Capture
+          </p>
+          <h2 className="mt-4 font-[family-name:var(--font-display)] text-[24px] font-semibold leading-[30px] tracking-[-0.03em] text-[var(--color-text)] sm:text-[32px] sm:leading-[40px]">
             Get early access to PawWalk
           </h2>
-          <p className="signup-copy mt-4 max-w-xl font-[family-name:var(--font-body)] text-base leading-7 text-[var(--color-background)]/85 sm:text-lg">
-            We’ll only email launch details. You can unsubscribe at any time. <a className="font-[family-name:var(--font-body)] font-semibold text-[var(--color-accent)] underline decoration-[var(--color-accent)]/60 underline-offset-4 transition-colors duration-200 ease-out hover:text-[var(--color-background)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent)]" href="#footer">Privacy policy.</a>
+          <p className="mt-4 font-[family-name:var(--font-body)] text-[16px] leading-[24px] text-[var(--color-text)]">
+            {`We’ll only email launch details. You can unsubscribe at any time. `}
+            <a
+              href="#footer"
+              className="underline underline-offset-4 transition-colors duration-150 ease-out hover:text-[var(--color-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-primary)]"
+            >
+              Privacy policy.
+            </a>
           </p>
+        </div>
 
-          <AnimatePresence mode="wait">
-            {isSubmitted ? (
-              <motion.div
-                key="signup-success"
-                id="signup-success"
-                className="signup-success mt-8 rounded-2xl bg-[var(--color-accent)]/15 p-5 ring-1 ring-[var(--color-accent)]/35"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-              >
-                <h3 className="signup-success-title font-[family-name:var(--font-display)] text-2xl font-semibold leading-tight text-[var(--color-accent)]">
-                  You’re on the list.
-                </h3>
-                <p className="signup-success-body mt-3 font-[family-name:var(--font-body)] text-base leading-7 text-[var(--color-background)]/85">
-                  Thanks for joining. We’ll send launch details when PawWalk is ready.
-                </p>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="signup-form-state"
-                className="mt-8 w-full"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-              >
-                <form className="signup-form flex w-full flex-col gap-5" onSubmit={handleSubmit} noValidate>
-                  <div className="signup-field flex w-full flex-col gap-2">
-                    <label className="signup-label font-[family-name:var(--font-body)] text-sm font-semibold leading-6 text-[var(--color-background)]" htmlFor="signup-email">
-                      Email address
-                    </label>
-                    <input
-                      id="signup-email"
-                      className="signup-input w-full rounded-full bg-[var(--color-background)] px-5 py-4 font-[family-name:var(--font-body)] text-base leading-6 text-[var(--color-text)] caret-[var(--color-primary)] outline-none ring-2 ring-transparent transition duration-200 ease-out placeholder:text-[var(--color-muted)] focus-visible:ring-[var(--color-accent)] disabled:cursor-not-allowed disabled:opacity-60"
-                      type="email"
-                      value={email}
-                      onChange={(event) => {
-                        setEmail(event.target.value);
-                        if (errors.email) {
-                          setErrors((currentErrors) => ({ ...currentErrors, email: undefined }));
-                        }
-                      }}
-                      placeholder="you@example.com"
-                      required
-                      aria-invalid={Boolean(errors.email)}
-                      aria-describedby={errors.email ? "signup-email-error" : undefined}
-                    />
-                    {errors.email ? (
-                      <p id="signup-email-error" className="signup-error font-[family-name:var(--font-body)] text-sm leading-6 text-[var(--color-accent)]" role="alert">
-                        {errors.email}
-                      </p>
-                    ) : null}
-                  </div>
-
-                  <div className="signup-field flex w-full flex-col gap-2">
-                    <div className="signup-consent flex items-start gap-3">
-                      <input
-                        id="signup-consent"
-                        className="mt-1 h-5 w-5 shrink-0 rounded border-0 bg-[var(--color-background)] text-[var(--color-primary)] outline-none ring-2 ring-transparent transition duration-200 ease-out focus-visible:ring-[var(--color-accent)] disabled:cursor-not-allowed disabled:opacity-60"
-                        type="checkbox"
-                        checked={hasConsent}
-                        onChange={(event) => {
-                          setHasConsent(event.target.checked);
-                          if (errors.consent) {
-                            setErrors((currentErrors) => ({ ...currentErrors, consent: undefined }));
-                          }
-                        }}
-                        required
-                        aria-invalid={Boolean(errors.consent)}
-                        aria-describedby={errors.consent ? "signup-consent-error" : undefined}
-                      />
-                      <label className="signup-consent-label font-[family-name:var(--font-body)] text-sm leading-6 text-[var(--color-background)]/85" htmlFor="signup-consent">
-                        I agree to receive marketing emails about PawWalk and understand I can unsubscribe at any time.
-                      </label>
-                    </div>
-                    {errors.consent ? (
-                      <p id="signup-consent-error" className="signup-error font-[family-name:var(--font-body)] text-sm leading-6 text-[var(--color-accent)]" role="alert">
-                        {errors.consent}
-                      </p>
-                    ) : null}
-                  </div>
-
-                  <motion.button
-                    id="signup-submit"
-                    className="signup-submit inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--color-primary)] px-6 py-4 font-[family-name:var(--font-body)] text-base font-semibold leading-6 text-[var(--color-text)] transition-colors duration-200 ease-out hover:bg-[var(--color-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent)] disabled:cursor-not-allowed disabled:opacity-60"
-                    type="submit"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    Join the waitlist
-                  </motion.button>
-
-                  <p className="signup-privacy font-[family-name:var(--font-body)] text-sm leading-6 text-[var(--color-background)]/70">
-                    We’ll only email launch details. You can unsubscribe at any time. <a className="font-[family-name:var(--font-body)] font-semibold text-[var(--color-accent)] underline decoration-[var(--color-accent)]/60 underline-offset-4 transition-colors duration-200 ease-out hover:text-[var(--color-background)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent)]" href="#footer">Privacy policy.</a>
+        <AnimatePresence mode="wait">
+          {isSubmitted ? (
+            <motion.div
+              key="success"
+              id="signup-success"
+              className="rounded-[24px] bg-[var(--color-bg)] px-6 py-8"
+              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: shouldReduceMotion ? 0 : -16 }}
+              transition={{ duration: shouldReduceMotion ? 0.01 : 0.3, ease: "easeOut" }}
+            >
+              <p className="font-[family-name:var(--font-body)] text-[14px] font-semibold uppercase tracking-[0.12em] text-[var(--color-primary)]">
+                Joined
+              </p>
+              <p className="mt-4 font-[family-name:var(--font-display)] text-[24px] font-semibold leading-[30px] tracking-[-0.02em] text-[var(--color-text)]">
+                Get early access to PawWalk
+              </p>
+              <p className="mt-4 font-[family-name:var(--font-body)] text-[16px] leading-[24px] text-[var(--color-text)]">
+                We’ll only email launch details. You can unsubscribe at any time. Privacy policy.
+              </p>
+            </motion.div>
+          ) : (
+            <motion.form
+              key="form"
+              onSubmit={handleSubmit}
+              className="grid gap-6 rounded-[24px] bg-[var(--color-bg)] px-6 py-8"
+              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: shouldReduceMotion ? 0 : -16 }}
+              transition={{ duration: shouldReduceMotion ? 0.01 : 0.3, ease: "easeOut" }}
+            >
+              <div className="grid gap-2">
+                <label
+                  htmlFor="signup-email"
+                  className="font-[family-name:var(--font-body)] text-[14px] font-semibold leading-[20px] text-[var(--color-text)]"
+                >
+                  Email
+                </label>
+                <input
+                  id="signup-email"
+                  name="email"
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  className="min-h-14 rounded-full border border-[var(--color-muted)] bg-white px-6 font-[family-name:var(--font-body)] text-[16px] leading-[24px] text-[var(--color-text)] outline-none transition-shadow duration-150 ease-out placeholder:text-[var(--color-muted)] focus-visible:ring-4 focus-visible:ring-[var(--color-primary)]/20"
+                  placeholder="hello@pawwalk.example"
+                  aria-invalid={errors.email ? true : false}
+                  aria-describedby={errors.email ? "signup-email-error" : undefined}
+                  required
+                />
+                {errors.email ? (
+                  <p id="signup-email-error" role="alert" className="font-[family-name:var(--font-body)] text-[14px] leading-[20px] text-red-600">
+                    {errors.email}
                   </p>
-                </form>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
+                ) : null}
+              </div>
+
+              <input id="signup-name" name="name" type="hidden" value="" />
+
+              <div className="grid gap-3">
+                <label className="flex items-start gap-3 font-[family-name:var(--font-body)] text-[14px] leading-[20px] text-[var(--color-text)]">
+                  <input
+                    type="checkbox"
+                    checked={hasConsent}
+                    onChange={(event) => setHasConsent(event.target.checked)}
+                    className="mt-1 h-4 w-4 rounded border border-[var(--color-muted)] text-[var(--color-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)]"
+                  />
+                  <span>
+                    {`We’ll only email launch details. You can unsubscribe at any time. `}
+                    <a
+                      href="#footer"
+                      className="underline underline-offset-4 transition-colors duration-150 ease-out hover:text-[var(--color-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-primary)]"
+                    >
+                      Privacy policy.
+                    </a>
+                  </span>
+                </label>
+                {errors.consent ? (
+                  <p role="alert" className="font-[family-name:var(--font-body)] text-[14px] leading-[20px] text-red-600">
+                    {errors.consent}
+                  </p>
+                ) : null}
+              </div>
+
+              <motion.button
+                id="signup-submit"
+                type="submit"
+                className="inline-flex min-h-14 items-center justify-center rounded-full bg-[var(--color-primary)] px-8 py-4 font-[family-name:var(--font-body)] text-[18px] font-semibold leading-[24px] text-white transition-colors duration-150 ease-out hover:bg-[var(--color-border)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-primary)]"
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
+              >
+                Join the waitlist
+              </motion.button>
+            </motion.form>
+          )}
+        </AnimatePresence>
       </div>
     </motion.section>
   );

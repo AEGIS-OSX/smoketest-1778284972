@@ -1,92 +1,107 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ProjectImage } from "@/app/components/ProjectImage";
 
-const reveal = {
-  hidden: {
-    opacity: 0,
-    y: 18,
-  },
-  visible: (delay: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay,
-      duration: 0.5,
-      ease: "easeOut",
-    },
-  }),
-};
-
 export default function Hero() {
+  const shouldReduceMotion = useReducedMotion();
+
+  const reveal = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 24 },
+    visible: (delay: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: shouldReduceMotion ? 0 : delay,
+        duration: shouldReduceMotion ? 0.01 : 0.55,
+        ease: "easeOut",
+      },
+    }),
+  };
+
   return (
     <motion.section
       id="hero"
-      className="hero-section min-h-[calc(100svh-4.5rem)] bg-[var(--color-bg)] px-4 py-16 text-[var(--color-text)] sm:px-6 sm:py-20 md:min-h-[calc(100svh-5rem)] md:px-8 lg:px-10"
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-12% 0px -12% 0px" }}
+      className="bg-[var(--color-bg)] px-5 py-24 text-[var(--color-text)] sm:px-8 sm:py-28 lg:px-16 lg:py-32"
+      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: shouldReduceMotion ? 0.01 : 0.6, ease: "easeOut" }}
     >
-      <div className="hero-shell mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 sm:gap-12 md:grid-cols-[46%_54%] md:gap-8 lg:gap-12">
-        <div className="hero-copy flex max-w-2xl flex-col items-start gap-5 sm:gap-6 md:pr-2 lg:pr-8">
+      <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-end lg:gap-16">
+        <div className="order-2 flex flex-col items-start gap-6 lg:order-1 lg:max-w-xl lg:gap-8">
           <motion.p
-            className="hero-kicker font-[family-name:var(--font-body)] text-xs font-semibold uppercase leading-4 tracking-[0.16em] text-[var(--color-muted)]"
+            className="font-[family-name:var(--font-body)] text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--color-muted)]"
             variants={reveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
             custom={0.05}
           >
             Early access for urban dog owners
           </motion.p>
 
           <motion.h1
-            className="hero-title max-w-[11ch] font-[family-name:var(--font-display)] text-[2rem] font-bold leading-[1.25] tracking-[-0.035em] text-[var(--color-text)] min-[380px]:text-[2.375rem] sm:text-[2.75rem] sm:leading-[1.16] lg:text-5xl lg:leading-[1.16]"
+            className="font-[family-name:var(--font-display)] text-[32px] font-semibold leading-[36px] tracking-[-0.03em] text-[var(--color-text)] sm:text-[40px] sm:leading-[48px] lg:text-[48px] lg:leading-[56px]"
             variants={reveal}
-            custom={0.15}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            custom={0.12}
           >
             PawWalk gets your dog out, every time.
           </motion.h1>
 
           <motion.p
-            className="hero-subtitle max-w-xl font-[family-name:var(--font-body)] text-base font-normal leading-6 text-[var(--color-muted)] sm:text-lg sm:leading-[1.45]"
+            className="max-w-lg font-[family-name:var(--font-body)] text-[16px] leading-[24px] text-[var(--color-text)] sm:text-[18px] sm:leading-[26px]"
             variants={reveal}
-            custom={0.25}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            custom={0.2}
           >
             PawWalk connects busy dog owners with local walkers so your dog gets regular walks, even on your busiest days.
           </motion.p>
 
           <motion.div
-            className="hero-actions flex w-full flex-col items-start gap-3 pt-1 min-[420px]:w-auto"
+            className="flex w-full max-w-sm flex-col items-start gap-4"
             variants={reveal}
-            custom={0.35}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            custom={0.28}
           >
             <motion.a
               id="cta-email"
               href="#signup"
-              className="hero-button inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[var(--color-primary)] px-6 py-3 font-[family-name:var(--font-body)] text-sm font-bold leading-5 text-[var(--color-bg)] transition-colors duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-primary)] min-[420px]:w-auto"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              className="inline-flex min-h-14 items-center justify-center rounded-full bg-[var(--color-primary)] px-8 py-4 font-[family-name:var(--font-body)] text-[18px] font-semibold leading-[24px] text-white transition-colors duration-150 ease-out hover:bg-[var(--color-border)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-primary)]"
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
             >
               Join the waitlist
             </motion.a>
+            <p className="font-[family-name:var(--font-body)] text-[14px] leading-[20px] text-[var(--color-muted)]">
+              {`We’ll only email launch details. You can unsubscribe at any time. `}
+              <a
+                href="#footer"
+                className="underline underline-offset-4 transition-colors duration-150 ease-out hover:text-[var(--color-text)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-primary)]"
+              >
+                Privacy policy.
+              </a>
+            </p>
           </motion.div>
-
-          <motion.p
-            className="hero-microcopy max-w-md font-[family-name:var(--font-body)] text-sm leading-5 text-[var(--color-muted)]"
-            variants={reveal}
-            custom={0.45}
-          >
-            We’ll only email launch details. You can unsubscribe at any time. <a href="#footer" className="font-[family-name:var(--font-body)] font-semibold text-[var(--color-muted)] underline decoration-[var(--color-muted)] decoration-1 underline-offset-4 transition-colors duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-primary)]">Privacy policy.</a>
-          </motion.p>
         </div>
 
         <motion.div
-          className="hero-media relative w-full overflow-hidden rounded-3xl bg-[var(--color-bg)] shadow-[0_18px_45px_rgba(0,0,0,0.10)]"
-          initial={{ opacity: 0, x: 32 }}
+          className="order-1 overflow-hidden rounded-[32px] bg-[var(--color-muted)] lg:order-2"
+          initial={{ opacity: 0, x: shouldReduceMotion ? 0 : 32 }}
           whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          viewport={{ once: true, margin: "-12% 0px -12% 0px" }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: shouldReduceMotion ? 0.01 : 0.65, ease: "easeOut", delay: shouldReduceMotion ? 0 : 0.08 }}
         >
-          <ProjectImage id="hero" className="hero-image aspect-[4/5] h-full w-full rounded-3xl object-cover md:aspect-[5/6]" />
+          <ProjectImage
+            id="hero"
+            className="h-full min-h-[360px] w-full object-cover object-center sm:min-h-[440px] lg:min-h-[640px]"
+          />
         </motion.div>
       </div>
     </motion.section>
