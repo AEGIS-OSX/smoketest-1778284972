@@ -1,31 +1,31 @@
 {
   "hero": {
-    "url": "",
-    "alt": "",
+    "url": "https://zkvkbpxrxnfynqqeytke.supabase.co/storage/v1/object/public/marketing-assets/smoketest-1778284972/cleo/1778285448250-hero.png",
+    "alt": "Lead hero image showing an early-morning urban walk with a cropped adult figure, dog, wet sidewalk texture, and negative space for landing-page copy. It fits the direction through restrained editorial",
     "width": 1920,
     "height": 1080
   },
   "feature_1": {
-    "url": "",
-    "alt": "",
+    "url": "https://zkvkbpxrxnfynqqeytke.supabase.co/storage/v1/object/public/marketing-assets/smoketest-1778284972/cleo/1778285440938-feature_1.png",
+    "alt": "Feature image for reliable walkers, focused on a clean hand clipping a leash to a harness beside an apartment stoop. The close crop communicates care and trust without staged posing, using warm stone,",
     "width": 800,
     "height": 600
   },
   "feature_2": {
-    "url": "",
-    "alt": "",
+    "url": "https://zkvkbpxrxnfynqqeytke.supabase.co/storage/v1/object/public/marketing-assets/smoketest-1778284972/cleo/1778285452473-feature_2.png",
+    "alt": "Feature image for flexible scheduling, showing a dawn entryway moment as an owner ties shoes while the dog waits by the door. The scene uses small human gestures, quiet domestic texture, and PawWalk’s",
     "width": 800,
     "height": 600
   },
   "feature_3": {
-    "url": "",
-    "alt": "",
+    "url": "https://zkvkbpxrxnfynqqeytke.supabase.co/storage/v1/object/public/marketing-assets/smoketest-1778284972/cleo/1778285447501-feature_3.png",
+    "alt": "Feature image for GPS-backed walks, trailing a walker and dog at a crosswalk with an abstract route cue on a phone. It supports the value through calm urban movement, clear path rhythm, and a restrain",
     "width": 800,
     "height": 600
   },
   "social_proof": {
-    "url": "",
-    "alt": "",
+    "url": "https://zkvkbpxrxnfynqqeytke.supabase.co/storage/v1/object/public/marketing-assets/smoketest-1778284972/cleo/1778285457303-social_proof.png",
+    "alt": "Social proof accent image showing a candid group of urban dog owners after a morning walk, cropped for testimonial overlays. The image keeps faces and leashes natural, uses soft negative space, and ca",
     "width": 1200,
     "height": 800
   }
